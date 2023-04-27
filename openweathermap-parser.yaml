@@ -1,0 +1,6 @@
+name: openweathermap
+tests: []
+fieldsToBeRemovedBeforeParsing: []
+$schema: https://schemas.humio.com/parser/v0.2.0
+script: parseJson() | parseTimestamp(field=dt, format=unixtime)
+tagFields: []
