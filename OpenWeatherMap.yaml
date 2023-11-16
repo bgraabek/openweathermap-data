@@ -1,0 +1,409 @@
+name: OpenWeatherMap
+timeSelector: {}
+sharedTimeInterval:
+  enabled: false
+  isLive: false
+  start: 1d
+widgets:
+  da0f6d2c-ba8f-4f22-ba9f-42be344b6fef:
+    x: 0
+    y: 14
+    height: 2
+    queryString: |-
+      #type=openweathermap name=?Location |
+      range(main.temp)
+    end: now
+    start: 1d
+    width: 4
+    options:
+      ct:
+      - bg: inherit
+        txt: rgb(239 68 68)
+        v: 30
+      - bg: inherit
+        txt: rgb(234 179 8)
+        v: 25
+      - bg: inherit
+        txt: rgb(34 197 94)
+        v: 10
+      - bg: inherit
+        txt: rgb(234 179 8)
+        v: 0
+      decimal-places: 1
+      color-method: static
+      sparkline-zero: true
+      use-colorised-thresholds: false
+      value-format: raw
+      default:
+        bg: inherit
+        txt: rgb(239 68 68)
+    visualization: single-value
+    title: Temperature range
+    isLive: false
+    type: query
+  44e5c83b-6460-41d1-8ce5-7d2ce30793e0:
+    x: 8
+    y: 18
+    height: 4
+    queryString: |-
+      #type=openweathermap name=?Location |
+      timechart(function=avg(main.pressure))
+    end: now
+    start: 1d
+    width: 4
+    options:
+      legend: false
+      connect-points: false
+      regression: false
+      mn: 900
+      imputation: none
+    visualization: time-chart
+    title: Atmospheric pressure over time
+    isLive: false
+    type: query
+  238ff572-c8ea-4a0a-9480-b7f3ec1d1061:
+    x: 0
+    y: 18
+    height: 4
+    queryString: |-
+      #type=openweathermap name=?Location |
+      tail(1) |
+      max(main.pressure)
+    end: now
+    start: 1d
+    width: 4
+    options:
+      default: {}
+    visualization: single-value
+    title: Latest atmospheric pressure
+    isLive: false
+    type: query
+  3f953519-e499-4c51-a432-c25ffef7f954:
+    x: 6
+    y: 7
+    height: 3
+    queryString: |-
+      #type=openweathermap name=?Location |
+      tail(1) |
+      case {
+          weather[0].description  = "clear" | emoji := "☀️";
+          weather[0].description  = "clear sky" | emoji := "☀️";
+          weather[0].description = "clouds" | emoji := "🌤";
+          weather[0].description = "broken clouds" | emoji := "🌤";
+          weather[0].description = "overcast clouds" | emoji := "☁️";
+          weather[0].description = "light rain" | emoji := "🌧";
+          weather[0].description = "moderate rain" | emoji := "🌧";
+          * | emoji := "🤔"
+      }
+      | select(emoji)
+    end: now
+    start: 1d
+    width: 6
+    options:
+      ct:
+      - bg: inherit
+        txt: rgb(239 68 68)
+        v: 30
+      - bg: inherit
+        txt: rgb(234 179 8)
+        v: 25
+      - bg: inherit
+        txt: rgb(34 197 94)
+        v: 10
+      - bg: inherit
+        txt: rgb(234 179 8)
+        v: 0
+      decimal-places: 1
+      color-method: threshold
+      sparkline-zero: true
+      use-colorised-thresholds: true
+      background-color: '#03319b'
+      value-format: raw
+      default:
+        bg: inherit
+        txt: rgb(239 68 68)
+    visualization: single-value
+    title: Weather emoji
+    isLive: false
+    type: query
+  49bbde79-89ec-4b4d-ade3-35d5474e10da:
+    x: 0
+    y: 7
+    height: 3
+    queryString: |-
+      #type=openweathermap name=?Location |
+      tail(1) |
+      table(weather[0].description)
+    end: now
+    start: 1d
+    width: 6
+    options:
+      ct:
+      - bg: inherit
+        txt: rgb(239 68 68)
+        v: 30
+      - bg: inherit
+        txt: rgb(234 179 8)
+        v: 25
+      - bg: inherit
+        txt: rgb(34 197 94)
+        v: 10
+      - bg: inherit
+        txt: rgb(234 179 8)
+        v: 0
+      decimal-places: 1
+      color-method: threshold
+      sparkline-zero: true
+      use-colorised-thresholds: true
+      background-color: '#03319B'
+      value-format: raw
+      default:
+        bg: inherit
+        txt: rgb(239 68 68)
+    visualization: single-value
+    title: Weather description
+    isLive: false
+    type: query
+  6e4a274f-b70d-4a0f-b582-a7bfe8c316b5:
+    x: 0
+    y: 16
+    height: 2
+    queryString: |-
+      #type=openweathermap name=?Location |
+      stats(function=[min(main.temp), max(main.temp)]) |
+      rename("_min",as="Minimum temperature") |
+      rename("_max",as="Maximum temperature")
+    visualization: table-view
+    end: now
+    start: 1d
+    width: 6
+    title: Min and Max temperature
+    isLive: false
+    type: query
+  2462be83-d9f3-4931-8bda-4ef50b8cf00f:
+    x: 4
+    y: 18
+    height: 4
+    queryString: |-
+      #type=openweathermap name=?Location |
+      range(main.pressure)
+    end: now
+    start: 1d
+    width: 4
+    options:
+      default: {}
+    visualization: single-value
+    title: Atmospheric pressure range
+    isLive: false
+    type: query
+  fd6e1383-e260-43d4-9d9a-d7ea7a6fad32:
+    x: 4
+    y: 10
+    height: 4
+    queryString: |-
+      #type=openweathermap name=?Location |
+      timechart(function=avg(main.humidity))
+    end: now
+    start: 1d
+    width: 4
+    options:
+      default: {}
+    visualization: single-value
+    title: Humidity
+    isLive: false
+    type: query
+  6ba1d50c-69dc-4ab6-b27b-40a5e0cec52a:
+    x: 6
+    y: 16
+    height: 2
+    queryString: |-
+      #type=openweathermap name=?Location |
+      stats(function=[min(wind.speed), max(wind.speed)]) |
+      rename("_min",as="Minimum windspeed") |
+      rename("_max",as="Maximum windspeed")
+    visualization: table-view
+    end: now
+    start: 1d
+    width: 6
+    title: Min and Max windspeed
+    isLive: false
+    type: query
+  aabc2798-e7e0-4241-b9a5-b9fd6f651d82:
+    x: 5
+    y: 3
+    height: 4
+    queryString: |-
+      #type=openweathermap |
+      groupBy(@timestamp, function=tail(1)) |
+      timechart(series=name, function=avg(main.temp))
+    end: now
+    start: 1d
+    width: 7
+    options:
+      legendTitle: celsius
+      withXAxisTitle: false
+      colorPalette: monoTeal
+      legendLocation: right
+      withLegendTitle: true
+      withYAxisTitle: false
+      includeHistogram: false
+      reversePalette: false
+    visualization: heat-map
+    title: City temperatures
+    isLive: false
+    type: query
+  7b06cc95-b6eb-4ae7-a184-30812e490198:
+    x: 0
+    y: 0
+    height: 3
+    queryString: |-
+      #type=openweathermap |
+      groupBy(name, function=tail(1)) |
+      rename("sys.country",as="Country") |
+      rename(name,as="Location name") |
+      table([@timestamp, Country, "Location name"])
+    visualization: table-view
+    end: now
+    start: 1d
+    width: 12
+    title: Status
+    isLive: false
+    type: query
+  80b8bab5-6c65-432e-a46d-b1178f5b11eb:
+    x: 4
+    y: 14
+    height: 2
+    queryString: |-
+      #type=openweathermap name=?Location |
+      range(main.humidity)
+    end: now
+    start: 1d
+    width: 4
+    options:
+      default: {}
+    visualization: single-value
+    title: Humidity range
+    isLive: false
+    type: query
+  2fd9cca2-57d7-4bbb-b712-a00694963c0a:
+    x: 0
+    y: 10
+    height: 4
+    queryString: |-
+      #type=openweathermap name=?Location |
+      timechart(function=avg(main.temp))
+    end: now
+    start: 1d
+    width: 4
+    options:
+      ct:
+      - bg: inherit
+        txt: rgb(239 68 68)
+        v: 30
+      - bg: inherit
+        txt: rgb(234 179 8)
+        v: 25
+      - bg: inherit
+        txt: rgb(34 197 94)
+        v: 10
+      - bg: inherit
+        txt: rgb(234 179 8)
+        v: 0
+      decimal-places: 1
+      color-method: threshold
+      sparkline-zero: true
+      use-colorised-thresholds: true
+      value-format: raw
+      default:
+        bg: inherit
+        txt: rgb(239 68 68)
+    visualization: single-value
+    title: Temperature
+    isLive: false
+    type: query
+  5ca1c515-0742-4482-8499-34451ea2b818:
+    x: 8
+    y: 10
+    height: 4
+    queryString: |-
+      #type=openweathermap name=?Location |
+      timechart(function=avg(wind.speed))
+    end: now
+    start: 1d
+    width: 4
+    options:
+      default: {}
+      sparkline-zero: true
+    visualization: single-value
+    title: Wind speed
+    isLive: false
+    type: query
+  3122662f-78e9-441f-b515-91e8ddee69ea:
+    x: 8
+    y: 14
+    height: 2
+    queryString: |-
+      #type=openweathermap name=?Location |
+      range(wind.speed)
+    end: now
+    start: 1d
+    width: 4
+    options:
+      default: {}
+    visualization: single-value
+    title: windspeed range
+    isLive: false
+    type: query
+  note-1665476656695-0:
+    x: 0
+    y: 22
+    height: 2
+    text: The data source of this dashboard is openweathermap.org. A script pulls
+      OpenWeather data every 10 minutes (the update frequency of the OpenWeather model)
+      and sends it to LogScale.
+    width: 12
+    title: Dashboard description
+    type: note
+  a1b22507-f247-4532-9e6f-698d9b7f16a5:
+    x: 0
+    y: 24
+    height: 2
+    queryString: |-
+      #type=openweathermap name=?Location |
+      tail(1)
+    end: now
+    start: 1d
+    width: 12
+    options:
+      columns: '[{"type":"field","fieldName":"@timestamp","format":"timestamp","width":180},{"type":"field","fieldName":"@rawstring","format":"logline"}]'
+      newestAtBottom: 'true'
+      showOnlyFirstLine: 'false'
+    visualization: list-view
+    title: Raw data feed
+    isLive: false
+    type: query
+  392125b0-e6d7-4bc7-aa1a-6a3944242db6:
+    x: 0
+    y: 3
+    height: 4
+    queryString: '#type=openweathermap | worldMap(lat=coord.lat, lon=coord.lon)'
+    end: now
+    start: 1d
+    width: 5
+    options:
+      magnitudeMode: none
+    visualization: world-map
+    title: Weather location
+    isLive: false
+    type: query
+$schema: https://schemas.humio.com/dashboard/v0.14.0
+parameters:
+  Location:
+    label: Location
+    query: '#type=openweathermap | top(name)'
+    timeInterval: 1d
+    useDashboardTimeIfSet: true
+    type: query
+    defaultValue: London
+    order: 50
+    valueField: name
